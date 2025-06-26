@@ -22,6 +22,7 @@ Entwicklung des GUI-Menüs mit folgenden Optionen:
 Mitglied 3:
 
 Erstellung eines Inspiration Boards, um visuelle und konzeptionelle Ideen für das Spiel zu sammeln (z. B. Farbpaletten, UI-Designs, Stilrichtlinien).
+
 Konfiguration und Vorbereitung des GitLab-Repositories 
 
 
