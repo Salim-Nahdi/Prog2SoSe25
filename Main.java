@@ -1,6 +1,6 @@
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import View.MenuScene;
 
 public class Main extends Application {
     @Override

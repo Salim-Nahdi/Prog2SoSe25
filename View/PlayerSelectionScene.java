@@ -1,3 +1,6 @@
+package View;
+
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,7 +18,7 @@ public class PlayerSelectionScene {
     private final List<Button> selectedButtons = new ArrayList<>();
     private final Button nextBtn = new Button();
     private final Image nextEnabledImg = new Image(Paths.get("assets/button/Next.png").toUri().toString());
-    private final Image nextDisabledImg = new Image(Paths.get("assets/button/Next.png").toUri().toString());
+    private final Image nextDisabledImg = new Image(Paths.get("assets/button/Next_disabled.png").toUri().toString());
     private final ImageView nextImgView = new ImageView();
 
     public PlayerSelectionScene(Stage stage) {
@@ -46,9 +49,13 @@ public class PlayerSelectionScene {
         nextBtn.setGraphic(nextImgView);
         nextBtn.setStyle("-fx-background-color: transparent;");
         nextBtn.setDisable(true);
+
         nextBtn.setOnAction(e -> {
             System.out.println("Proceeding with 2 selected characters...");
-            // Proceed to game logic
+            String char1 = selectedButtons.get(0).getId();  // ID contains image path
+            String char2 = selectedButtons.get(1).getId();
+            BattleScene battleScene = new BattleScene(stage, char1, char2);
+            stage.setScene(battleScene.getScene());
         });
 
         VBox layout = new VBox(40, allPlayers, nextBtn);
@@ -75,6 +82,9 @@ public class PlayerSelectionScene {
         Button selectButton = new Button("", buttonImageView);
         selectButton.setStyle("-fx-background-color: transparent;");
         selectButton.setPrefSize(buttonImageView.getFitWidth(), buttonImageView.getFitHeight());
+
+        // 👉 Store image path as ID
+        selectButton.setId(characterImagePath);
 
         selectButton.setOnAction(e -> {
             if (selectedButtons.contains(selectButton)) {
