@@ -1,6 +1,5 @@
 package View;
 
-
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,12 +12,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.border.Border;
+
 public class PlayerSelectionScene {
     private final Scene scene;
     private final List<Button> selectedButtons = new ArrayList<>();
     private final Button nextBtn = new Button();
     private final Image nextEnabledImg = new Image(Paths.get("assets/button/Next.png").toUri().toString());
-    private final Image nextDisabledImg = new Image(Paths.get("assets/button/Next_disabled.png").toUri().toString());
+    private final Image nextDisabledImg = new Image(Paths.get("assets/button/Next.png").toUri().toString());
     private final ImageView nextImgView = new ImageView();
 
     public PlayerSelectionScene(Stage stage) {
@@ -58,10 +59,13 @@ public class PlayerSelectionScene {
             stage.setScene(battleScene.getScene());
         });
     
-        Button quitBtn = new Button("Quit");
-        quitBtn.setStyle("-fx-font-size: 16px; -fx-background-color: #ff4444; -fx-text-fill: white;");
-        quitBtn.setPrefWidth(120);
-        quitBtn.setOnAction(e -> System.exit(0));
+        ImageView quitImg = new ImageView(new Image(Paths.get("assets/button/Quit.png").toUri().toString()));
+        quitImg.setFitWidth(180);
+        quitImg.setFitHeight(60);
+
+        Button quitBtn = new Button("", quitImg);
+        quitBtn.setBackground(Background.EMPTY);
+        quitBtn.setOnAction(e -> stage.close());
 
         VBox layout = new VBox(40, allPlayers, nextBtn , quitBtn);
         layout.setAlignment(Pos.CENTER);
