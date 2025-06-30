@@ -1,4 +1,9 @@
 package View;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Button;
+
+
 
 import javafx.animation.*;
 import javafx.geometry.Insets;
@@ -115,8 +120,42 @@ public class BattleScene {
 
         // Bot starts attacking
         startBotLoop();
+        
+        // Menu Button
+        Button menuBtn = new Button("☰");
+        menuBtn.setStyle("-fx-font-size: 20px; -fx-background-color: transparent; -fx-text-fill: white;");
+        menuBtn.setLayoutX(475);
+        menuBtn.setLayoutY(20);
 
-     //   updateHpLabels();
+        // ContextMenu with options
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem restartItem = new MenuItem("Restart Game");
+        MenuItem changePlayerItem = new MenuItem("Change Players");
+        MenuItem quitItem = new MenuItem("Quit Game");
+
+        contextMenu.getItems().addAll(restartItem, changePlayerItem, quitItem);
+
+        // Show on click
+        menuBtn.setOnAction(e -> contextMenu.show(menuBtn, javafx.geometry.Side.BOTTOM, 0, 0));
+
+        // Actions
+        restartItem.setOnAction(e -> {
+            BattleScene newScene = new BattleScene(stage, p1.getImagePath(), p2.getImagePath());
+            stage.setScene(newScene.getScene());
+        });
+
+        changePlayerItem.setOnAction(e -> {
+            PlayerSelectionScene selectionScene = new PlayerSelectionScene(stage);
+            stage.setScene(selectionScene.getScene());
+        });
+
+        quitItem.setOnAction(e -> {
+            stage.close();
+        });
+
+        // Add to characterPane
+        characterPane.getChildren().add(menuBtn);
+
     }
 
     private void setupMovementControls() {
