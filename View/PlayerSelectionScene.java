@@ -57,8 +57,13 @@ public class PlayerSelectionScene {
             BattleScene battleScene = new BattleScene(stage, char1, char2);
             stage.setScene(battleScene.getScene());
         });
+    
+        Button quitBtn = new Button("Quit");
+        quitBtn.setStyle("-fx-font-size: 16px; -fx-background-color: #ff4444; -fx-text-fill: white;");
+        quitBtn.setPrefWidth(120);
+        quitBtn.setOnAction(e -> System.exit(0));
 
-        VBox layout = new VBox(40, allPlayers, nextBtn);
+        VBox layout = new VBox(40, allPlayers, nextBtn , quitBtn);
         layout.setAlignment(Pos.CENTER);
         root.getChildren().add(layout);
 
