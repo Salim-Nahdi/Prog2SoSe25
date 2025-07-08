@@ -12,13 +12,22 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.border.Border;
+import Model.Player;
 
 public class PlayerSelectionScene {
     private final Scene scene;
+
+    // Button state images
+    private final Image selectImage   = new Image(Paths.get("assets/button/Select.png").toUri().toString());
+    private final Image selectedImage = new Image(Paths.get("assets/button/Selected.png").toUri().toString());
+    private final Image redImage      = new Image(Paths.get("assets/button/Selected_red.png").toUri().toString());
+
+    private final List<Button> allButtons = new ArrayList<>();
     private final List<Button> selectedButtons = new ArrayList<>();
+
+    // Next button
     private final Button nextBtn = new Button();
-    private final Image nextEnabledImg = new Image(Paths.get("assets/button/Next.png").toUri().toString());
+    private final Image nextEnabledImg  = new Image(Paths.get("assets/button/Next.png").toUri().toString());
     private final Image nextDisabledImg = new Image(Paths.get("assets/button/Next.png").toUri().toString());
     private final ImageView nextImgView = new ImageView();
 
@@ -43,31 +52,24 @@ public class PlayerSelectionScene {
         HBox allPlayers = new HBox(60, player1, player2, player3, player4);
         allPlayers.setAlignment(Pos.CENTER);
 
-        // NEXT Button (Initially disabled and gray)
+        // NEXT Button (Initially disabled)
         nextImgView.setImage(nextDisabledImg);
         nextImgView.setFitWidth(180);
         nextImgView.setPreserveRatio(true);
         nextBtn.setGraphic(nextImgView);
         nextBtn.setStyle("-fx-background-color: transparent;");
         nextBtn.setDisable(true);
+        nextBtn.setOnAction(e -> proceedToBattle(stage));
 
-        nextBtn.setOnAction(e -> {
-            System.out.println("Proceeding with 2 selected characters...");
-            String char1 = selectedButtons.get(0).getId();  // ID contains image path
-            String char2 = selectedButtons.get(1).getId();
-            BattleScene battleScene = new BattleScene(stage, char1, char2);
-            stage.setScene(battleScene.getScene());
-        });
-    
+        // QUIT Button
         ImageView quitImg = new ImageView(new Image(Paths.get("assets/button/Quit.png").toUri().toString()));
         quitImg.setFitWidth(180);
-        quitImg.setFitHeight(60);
-
+        quitImg.setFitHeight(40);
         Button quitBtn = new Button("", quitImg);
         quitBtn.setBackground(Background.EMPTY);
         quitBtn.setOnAction(e -> stage.close());
 
-        VBox layout = new VBox(40, allPlayers, nextBtn , quitBtn);
+        VBox layout = new VBox(40, allPlayers, nextBtn, quitBtn);
         layout.setAlignment(Pos.CENTER);
         root.getChildren().add(layout);
 
@@ -81,44 +83,81 @@ public class PlayerSelectionScene {
         characterView.setFitWidth(180);
         characterView.setFitHeight(180);
 
-        // Select and Selected buttons
-        Image selectImage = new Image(Paths.get("assets/button/Select.png").toUri().toString());
-        Image selectedImage = new Image(Paths.get("assets/button/Selected.png").toUri().toString());
-        ImageView buttonImageView = new ImageView(selectImage);
-        buttonImageView.setFitWidth(140);
-        buttonImageView.setPreserveRatio(true);
+        // Select button
+        Button btn = new Button();
+        btn.setId(characterImagePath);
+        btn.setBackground(Background.EMPTY);
+        btn.setGraphic(makeImageView(selectImage));
 
-        Button selectButton = new Button("", buttonImageView);
-        selectButton.setStyle("-fx-background-color: transparent;");
-        selectButton.setPrefSize(buttonImageView.getFitWidth(), buttonImageView.getFitHeight());
-
-        // 👉 Store image path as ID
-        selectButton.setId(characterImagePath);
-
-        selectButton.setOnAction(e -> {
-            if (selectedButtons.contains(selectButton)) {
-                selectedButtons.remove(selectButton);
-                buttonImageView.setImage(selectImage);
+        btn.setOnAction(e -> {
+            if (selectedButtons.remove(btn)) {
+                // deselected
             } else if (selectedButtons.size() < 2) {
-                selectedButtons.add(selectButton);
-                buttonImageView.setImage(selectedImage);
+                selectedButtons.add(btn);
             }
+            refreshAllButtonGraphics();
             updateNextButtonState();
         });
 
-        VBox vbox = new VBox(15, characterView, selectButton);
-        vbox.setAlignment(Pos.CENTER);
-        return vbox;
+        allButtons.add(btn);
+        return new VBox(15, characterView, btn);
+    }
+
+    private ImageView makeImageView(Image img) {
+        ImageView iv = new ImageView(img);
+        iv.setFitWidth(140);
+        iv.setFitHeight(40);
+        return iv;
+    }
+
+    private void refreshAllButtonGraphics() {
+        boolean twoPicked = (selectedButtons.size() == 2);
+        for (Button btn : allButtons) {
+            ImageView iv = (ImageView) btn.getGraphic();
+            if (selectedButtons.contains(btn)) {
+                iv.setImage(selectedImage);
+            } else if (twoPicked) {
+                iv.setImage(redImage);
+            } else {
+                iv.setImage(selectImage);
+            }
+        }
     }
 
     private void updateNextButtonState() {
-        if (selectedButtons.size() == 2) {
-            nextBtn.setDisable(false);
-            nextImgView.setImage(nextEnabledImg);
-        } else {
-            nextBtn.setDisable(true);
-            nextImgView.setImage(nextDisabledImg);
-        }
+        boolean twoSelected = (selectedButtons.size() == 2);
+        nextBtn.setDisable(!twoSelected);
+        nextImgView.setImage(twoSelected ? nextEnabledImg : nextDisabledImg);
+    }
+
+    private void proceedToBattle(Stage stage) {
+        // collect selected characters
+        String char1 = selectedButtons.get(0).getId();
+        String char2 = selectedButtons.get(1).getId();
+        Player[] p1 = createPlayers(char1, char2);
+
+        // auto-assign remaining
+        String char3 = getRemainingCharacter(char1, char2, "");
+        String char4 = getRemainingCharacter(char1, char2, char3);
+        Player[] p2 = createPlayers(char3, char4);
+
+        BattleScene battleScene = new BattleScene(stage, p1, p2);
+        stage.setScene(battleScene.getScene());
+    }
+
+    private String getRemainingCharacter(String s1, String s2, String s3) {
+        if (!s1.equals("assets/alien/alien1.png") && !s2.equals("assets/alien/alien1.png") && !s3.equals("assets/alien/alien1.png"))
+            return "assets/alien/alien1.png";
+        else if (!s1.equals("assets/mummy/mummy1.png") && !s2.equals("assets/mummy/mummy1.png") && !s3.equals("assets/mummy/mummy1.png"))
+            return "assets/mummy/mummy1.png";
+        else if (!s1.equals("assets/Baum/player1.png") && !s2.equals("assets/Baum/player1.png") && !s3.equals("assets/Baum/player1.png"))
+            return "assets/Baum/player1.png";
+        else
+            return "assets/Stein/rock.png";
+    }
+
+    private Player[] createPlayers(String c1, String c2) {
+        return new Player[]{Player.createPlayerFromPath(c1), Player.createPlayerFromPath(c2)};
     }
 
     public Scene getScene() {

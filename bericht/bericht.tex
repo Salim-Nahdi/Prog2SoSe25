@@ -1,0 +1,71 @@
+\documentclass[12pt,a4paper]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage[pdftex]{hyperref}
+\title{Bericht}
+\subtitle{über die Implementation von Pocket Monster in JavaFX}
+\author{von Ahmed, Amir, Matthias, Omar und Salim.}
+%\subject{Pocket Monsters}
+\titlehead{Programmieren II an der Leibniz Universität Hannover}
+\date{16.~Juni -- 12.~Juli~2025}
+
+\renewcommand*\thesection{\arabic{section}. Woche}
+
+%-------------- Zusammenfassung
+\newcommand{\zusammenfassung}[1]{{
+
+\bigskip\noindent\hrulefill\quad\textsf{{\small \textit{Zusammenfassung}}}}\quad\hrulefill
+
+\medskip\noindent #1 
+
+\noindent\hrulefill}
+%--------------
+
+
+\hypersetup{
+    pdftitle = {Bericht über Implementation von Pocket Monster},
+    pdfauthor = {Ahmed Amine Kortas, Amir Abid, Matthias-Benjamin Ahrens, Omar Ennabli und Salim Nahdi},
+    pdfsubject = {Bericht über die implementieren von Pocket Monsters in JavaFX im Rahmen der Gruppenaufgabe in Programmieren II},
+    pdfkeywords = {Programmieren, JavaFX, Leibniz Universität Hannover, Gruppenaufgabe, Pocket Monsters},
+    colorlinks = true
+}
+
+
+\begin{document}
+\maketitle
+%\tableofcontents
+
+\section{26.06. bis 30.06.2025}
+In der ersten Woche haben wir mit der Grundstruktur unseres JavaFX-Projekts begonnen. Ziel war es, ein spielbares Grundgerüst mit klarer Trennung zwischen Model, View und Controller zu erstellen. Die wichtigsten Aufgaben und Fortschritte waren:
+
+\begin{description}
+\item[Projektstrukturierung] Es wurde die MVC-Struktur und das Basislayout mit \texttt{MenuScene} und \texttt{PlayerSelectionScene} erstellt.
+\item[Spielstart] Erste Menüs und die Möglichkeit zur Spielerauswahl wurden implementiert.
+\item[Elementsystem \& Attack-Multiplikatoren] Das Element-System wurde hinzu gefügt, das den Schaden der Angriffe beeinflusst.
+\item[Damage-Animation] Die Implementierung einer simplen Angriffsanimation zur Visualisierung von Attacken wurde begonnen.
+\end{description}
+
+\zusammenfassung{Die erste Woche diente dem Aufbau des Grundgerüsts mit Menüs, Spiellogik und ersten Animationen. Die Zusammenarbeit funktionierte gut, und das Projekt war früh lauffähig.}
+\section{01.07. bis 05.07.2025}
+In der zweiten Woche konzentrierten wir uns auf die Spielmechanik, Interaktion und visuelle Rückmeldungen. Die Hauptbeiträge:
+
+\begin{description}
+\item[Damage Animation V2] Verbesserte Übergänge und visuelle Effekte bei Angriffen.
+\item[TextBox für Kampfstatus] Eine Textanzeige wurde hinzugefügt, die Kampfnachrichten wie „It’s super effective!“ anzeigt.
+\item[Cooldown-System] Ultimative Angriffe haben jetzt Abklingzeiten, die korrekt verwaltet werden.
+\item[Victory/Defeat-Screen] Am Ende eines Kampfes wird nun ein entsprechender Bildschirm mit Bild und Text eingeblendet.
+\item[Spielerwechsel und Buttons] Buttons für Angriff, Spielerwechsel und Ultimate wurden eingeführt und mit der Logik verbunden.
+\item[HealthBar-Update] Gesundheitsanzeigen wurden überarbeitet, um zwei Spieler je Seite korrekt darzustellen.
+\end{description}
+
+\zusammenfassung{Diese Woche war durch intensive Arbeit an Benutzerinteraktion und Spielfeedback geprägt. Das Spielgefühl wurde deutlich verbessert und viele Bugs wurden behoben.}
+
+\newpage
+\section*{Anleitung}
+
+\end{document}
